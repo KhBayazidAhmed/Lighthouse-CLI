@@ -1,0 +1,20 @@
+# Sample URLs for Lighthouse batch audits
+# Lines starting with # are comments and will be ignored
+
+# Popular websites for testing
+https://www.google.com
+https://www.github.com
+https://www.stackoverflow.com
+https://www.wikipedia.org
+
+# E-commerce sites
+https://www.amazon.com
+https://www.shopify.com
+
+# News sites
+https://www.bbc.com
+https://www.cnn.com
+
+# Add your own URLs below:
+# https://your-website.com
+# https://your-staging-site.com 

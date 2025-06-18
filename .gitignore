@@ -49,3 +49,6 @@ coverage/
 
 # ESLint cache
 .eslintcache 
+
+# Lighthouse reports
+lighthouse-reports/
