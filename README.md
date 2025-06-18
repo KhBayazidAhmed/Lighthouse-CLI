@@ -26,7 +26,7 @@ A powerful, TypeScript-based command-line tool for automating Google Lighthouse 
 
 ```bash
 # Clone the repository
-git clone <your-repository-url>
+git clone https://github.com/KhBayazidAhmed/Lighthouse-CLI
 cd light-house-cli
 
 # Run the installation script
@@ -44,7 +44,7 @@ The installation script will:
 
 ```bash
 # 1. Clone and navigate
-git clone <your-repository-url>
+git clone https://github.com/KhBayazidAhmed/Lighthouse-CLI
 cd light-house-cli
 
 # 2. Install dependencies
