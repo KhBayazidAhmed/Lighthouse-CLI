@@ -1,8 +1,10 @@
+import path from 'path';
+import chalk from 'chalk';
 import { BatchOptions, AuditResult } from '../types/index.js';
 import { readUrlsFromFile, parseUrlsFromString, saveBatchSummary } from '../utils/file.js';
 import { logError, logInfo, logSuccess, logBatchProgress } from '../utils/display.js';
 import { runSingleAuditSilent } from './audit.js';
-import { DEFAULT_CONCURRENT_AUDITS } from '../constants/index.js';
+import { DEFAULT_CONCURRENT_AUDITS, DEFAULT_OUTPUT_DIR } from '../constants/index.js';
 
 export async function runBatchAudit(options: BatchOptions): Promise<void> {
     const urls = await getUrlsForBatch(options);
@@ -31,7 +33,22 @@ export async function runBatchAudit(options: BatchOptions): Promise<void> {
 
     // Generate summary report
     const summaryPath = await saveBatchSummary(results, options);
-    logSuccess(`Batch summary saved to: ${summaryPath}`);
+    const absoluteSummaryPath = path.resolve(summaryPath);
+    const outputDir = path.resolve(options.outputDir || DEFAULT_OUTPUT_DIR);
+
+    logSuccess(`Batch summary saved to: ${absoluteSummaryPath}`);
+
+    // Display batch completion information
+    console.log('');
+    console.log(chalk.cyan('📊 Batch Audit Complete!'));
+    console.log(chalk.yellow(`   • Individual reports saved to: ${outputDir}`));
+    console.log(chalk.yellow(`   • Summary report: ${absoluteSummaryPath}`));
+    console.log('');
+    console.log(chalk.cyan('📖 How to view your reports:'));
+    console.log(chalk.yellow(`   • Browse reports folder: open "${outputDir}"`));
+    console.log(chalk.yellow(`   • View summary JSON: cat "${absoluteSummaryPath}"`));
+    console.log(chalk.yellow(`   • List all reports: ls -la "${outputDir}"`));
+    console.log('');
 }
 
 async function getUrlsForBatch(options: BatchOptions): Promise<string[]> {

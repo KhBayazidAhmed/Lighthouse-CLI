@@ -1,5 +1,6 @@
 import ora from 'ora';
 import chalk from 'chalk';
+import path from 'path';
 import { AuditOptions } from '../types/index.js';
 import { runLighthouseAudit, runSilentLighthouseAudit } from '../utils/lighthouse.js';
 import {
@@ -33,7 +34,26 @@ export async function runSingleAudit(url: string, options: AuditOptions): Promis
         // Save report
         await saveAuditReport(runnerResult, outputPath, options.format || DEFAULT_FORMAT);
 
-        spinner.succeed(`Audit completed! Report saved to: ${chalk.green(outputPath)}`);
+        // Get absolute path for display
+        const absolutePath = path.resolve(outputPath);
+
+        spinner.succeed(`Audit completed! Report saved to: ${chalk.green(absolutePath)}`);
+
+        // Display how to access the report
+        console.log('');
+        console.log(chalk.cyan('📖 How to view your report:'));
+        const reportFormat = options.format || DEFAULT_FORMAT;
+        if (reportFormat === 'html') {
+            console.log(chalk.yellow(`   • Open in browser: file://${absolutePath}`));
+            console.log(chalk.yellow(`   • Or double-click the file: ${absolutePath}`));
+        } else if (reportFormat === 'json') {
+            console.log(chalk.yellow(`   • View JSON data: cat "${absolutePath}"`));
+            console.log(chalk.yellow(`   • Open in editor: code "${absolutePath}"`));
+        } else if (reportFormat === 'csv') {
+            console.log(chalk.yellow(`   • View CSV data: cat "${absolutePath}"`));
+            console.log(chalk.yellow(`   • Open in spreadsheet: open "${absolutePath}"`));
+        }
+        console.log('');
 
         // Display summary
         displayScoreSummary(runnerResult.lhr);

@@ -8,7 +8,14 @@ export async function ensureOutputDirectory(outputDir: string): Promise<void> {
 }
 
 export function generateFilename(url: string, output?: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const timestamp = new Date().toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+    }).replace(/, /g, ' ').replace(/\//g, '-').replace(/:/g, '-');
     const urlSlug = new URL(url).hostname.replace(/\./g, '-');
     return output || `${urlSlug}-${timestamp}`;
 }
