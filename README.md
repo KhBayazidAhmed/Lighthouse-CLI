@@ -35,10 +35,26 @@ chmod +x install.sh
 ```
 
 The installation script will:
-- ✅ Check Node.js version compatibility
+- ✅ Check Node.js version compatibility (16.0.0+)
 - 📦 Install all dependencies
-- 🔨 Build the project
+- 🔨 Build the TypeScript project
+- 🔧 Make the CLI executable
 - 🔗 Optionally install globally for system-wide access
+
+### Uninstallation
+
+To completely remove the CLI and clean up files:
+
+```bash
+# Run the uninstall script
+bash uninstall.sh
+```
+
+The uninstall script will:
+- 🗑️ Remove the global CLI installation
+- 🧹 Clean build files (`dist/` folder)
+- 🤔 Optionally remove dependencies (`node_modules/`)
+- 📊 Optionally remove generated reports
 
 ### Manual Installation
 
@@ -301,11 +317,14 @@ light-house-cli/
 │   ├── types/            # TypeScript type definitions
 │   ├── utils/            # Utility functions
 │   ├── constants/        # Configuration constants
-│   └── index.ts          # Main entry point
+│   └── index.ts          # Main entry point (with shebang)
+├── dist/                 # Built JavaScript files (after npm run build)
 ├── lighthouse-reports/   # Default output directory
 ├── install.sh           # Installation script
+├── uninstall.sh         # Uninstallation script
 ├── sample-urls.txt      # Example URLs file
-└── package.json         # Project configuration
+├── package.json         # Project configuration
+└── tsconfig.json        # TypeScript configuration
 ```
 
 ---
@@ -370,7 +389,7 @@ lighthouse-cli audit https://example.com --output-dir ~/Documents/reports
 ```
 
 #### 🔧 Node.js Version Issues
-**Problem**: Incompatible Node.js version
+**Problem**: "Node.js version X.X.X is too old" error during installation
 
 **Solutions**:
 ```bash
@@ -384,7 +403,11 @@ nvm use 16
 # Or install latest LTS
 nvm install --lts
 nvm use --lts
+
+# If you have Node.js 16+ but still get the error, the version check script may need updating
 ```
+
+**Note**: The installation script requires Node.js 16.0.0 or higher. If you have a compatible version but still get errors, try running the installation script again.
 
 ### Performance Tips
 
@@ -442,11 +465,19 @@ If you encounter any issues or have questions:
 ## 🎯 Quick Reference
 
 ```bash
-# Quick start commands
+# Installation
+bash install.sh                                             # Install CLI
+bash uninstall.sh                                          # Uninstall CLI
+
+# Quick start commands (after global installation)
 lighthouse-cli audit https://example.com                    # Basic audit
 lighthouse-cli batch -f sample-urls.txt                     # Batch from file
 lighthouse-cli compare https://site1.com https://site2.com  # Compare sites
 lighthouse-cli monitor https://example.com -i 30 -t 85      # Monitor site
+
+# Alternative (if not installed globally)
+node dist/index.js audit https://example.com                # Basic audit
+node dist/index.js --help                                   # Show help
 
 # Common options
 -d desktop          # Desktop device
