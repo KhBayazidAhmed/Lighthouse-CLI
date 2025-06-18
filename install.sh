@@ -14,7 +14,12 @@ fi
 NODE_VERSION=$(node -v | cut -d'v' -f2)
 REQUIRED_VERSION="16.0.0"
 
-if ! node -e "process.exit(require('semver').gte('$NODE_VERSION', '$REQUIRED_VERSION') ? 0 : 1)" 2>/dev/null; then
+if ! node -e "
+const [major, minor, patch] = '$NODE_VERSION'.split('.').map(Number);
+const [reqMajor, reqMinor, reqPatch] = '$REQUIRED_VERSION'.split('.').map(Number);
+const isValid = major > reqMajor || (major === reqMajor && minor > reqMinor) || (major === reqMajor && minor === reqMinor && patch >= reqPatch);
+process.exit(isValid ? 0 : 1);
+" 2>/dev/null; then
     echo "❌ Node.js version $NODE_VERSION is too old. Please install Node.js 16.0.0 or higher."
     exit 1
 fi
@@ -39,6 +44,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Make the CLI executable
+echo "🔧 Making CLI executable..."
+chmod +x dist/index.js
+
 # Link globally (optional)
 echo "🔗 Would you like to install the CLI globally? (y/n)"
 read -r response
@@ -61,8 +70,8 @@ echo ""
 echo "🎉 Installation complete!"
 echo ""
 echo "Quick start:"
-echo "  node dist/index.js audit https://example.com"
-echo "  node dist/index.js batch -f sample-urls.txt"
-echo "  node dist/index.js compare https://site1.com https://site2.com"
+echo "  lighthouse-cli audit https://example.com"
+echo "  lighthouse-cli batch -f sample-urls.txt"
+echo "  lighthouse-cli compare https://site1.com https://site2.com"
 echo ""
-echo "For more information, run: node dist/index.js --help" 
+echo "For more information, run: lighthouse-cli --help" 
