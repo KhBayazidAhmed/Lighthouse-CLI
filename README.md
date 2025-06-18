@@ -1,129 +1,150 @@
-# Lighthouse CLI - Automated Performance Auditing
+# 🚀 Lighthouse CLI - Automated Performance Auditing Tool
 
-A powerful command-line tool for automating Google Lighthouse audits, built with TypeScript and Node.js.
+A powerful, TypeScript-based command-line tool for automating Google Lighthouse audits with advanced features like batch processing, URL comparison, and continuous monitoring.
 
-## Features
+## ✨ Features
 
-- 🚀 **Single URL Audits** - Run Lighthouse audits on individual websites
-- 📊 **Batch Processing** - Audit multiple URLs from a file or command line
-- 🔍 **URL Comparison** - Compare performance metrics between two websites
-- 📈 **Continuous Monitoring** - Monitor websites and get alerts on performance degradation
-- 📋 **Multiple Output Formats** - Export reports as HTML, JSON, or CSV
-- 🖥️ **Device Emulation** - Test on mobile or desktop configurations
-- ⚡ **Concurrent Processing** - Run multiple audits simultaneously for faster batch processing
+- 🔍 **Single URL Audits** - Run comprehensive Lighthouse audits on individual websites
+- 📊 **Batch Processing** - Audit multiple URLs simultaneously with configurable concurrency
+- ⚖️ **URL Comparison** - Side-by-side performance comparison between two websites
+- 📈 **Continuous Monitoring** - Automated monitoring with performance threshold alerts
+- 📋 **Multiple Output Formats** - Export as HTML, JSON, or CSV formats
+- 📱 **Device Emulation** - Test on mobile or desktop configurations
+- ⚡ **Concurrent Processing** - Multi-threaded audits for faster batch processing
+- 🎯 **Category Selection** - Choose specific audit categories (Performance, Accessibility, SEO, etc.)
+- 🚫 **Throttling Control** - Disable throttling for local development testing
 
-## Installation
+## 📋 Requirements
 
-1. Clone the repository:
+- **Node.js**: 16.0.0 or higher
+- **Chrome/Chromium**: Automatically launched (must be installed)
+- **Operating System**: macOS, Linux, or Windows
+
+## 🔧 Installation
+
+### Quick Install (Recommended)
+
 ```bash
-git clone <repository-url>
+# Clone the repository
+git clone <your-repository-url>
 cd light-house-cli
+
+# Run the installation script
+chmod +x install.sh
+./install.sh
 ```
 
-2. Install dependencies:
+The installation script will:
+- ✅ Check Node.js version compatibility
+- 📦 Install all dependencies
+- 🔨 Build the project
+- 🔗 Optionally install globally for system-wide access
+
+### Manual Installation
+
 ```bash
+# 1. Clone and navigate
+git clone <your-repository-url>
+cd light-house-cli
+
+# 2. Install dependencies
 npm install
-```
 
-3. Build the project:
-```bash
+# 3. Build the project
 npm run build
-```
 
-4. Link the CLI globally (optional):
-```bash
+# 4. (Optional) Install globally
 npm link
 ```
 
-## Usage
+## 🚀 Usage Guide
 
-### Single URL Audit
-
-Run a Lighthouse audit on a single URL:
+### Command Structure
 
 ```bash
-# Basic audit
+# If installed globally
+lighthouse-cli <command> [options]
+
+# If not installed globally
+node dist/index.js <command> [options]
+```
+
+---
+
+## 📖 Commands Reference
+
+### 1. Single URL Audit
+
+Perform a comprehensive Lighthouse audit on a single website.
+
+```bash
+# Basic audit (mobile, HTML output)
 lighthouse-cli audit https://example.com
 
-# Custom output filename and format
-lighthouse-cli audit https://example.com -o my-report -f json
+# Custom filename and JSON output
+lighthouse-cli audit https://example.com -o my-website-audit -f json
 
 # Desktop audit with specific categories
-lighthouse-cli audit https://example.com -d desktop -c performance,accessibility
+lighthouse-cli audit https://example.com -d desktop -c performance,accessibility,seo
 
-# Disable throttling for faster local testing
-lighthouse-cli audit https://example.com --no-throttling
+# Fast audit without throttling (for local development)
+lighthouse-cli audit http://localhost:3000 --no-throttling
 ```
 
-**Options:**
-- `-o, --output <filename>` - Output filename (without extension)
-- `-f, --format <format>` - Output format: `json`, `html`, `csv` (default: `html`)
-- `-d, --device <device>` - Device type: `mobile`, `desktop` (default: `mobile`)
-- `-c, --categories <categories>` - Comma-separated categories: `performance,accessibility,best-practices,seo,pwa`
-- `--output-dir <dir>` - Output directory (default: `./lighthouse-reports`)
-- `--no-throttling` - Disable network/CPU throttling
+#### Options:
+| Option | Description | Default | Example |
+|--------|-------------|---------|---------|
+| `-o, --output` | Output filename (without extension) | Auto-generated | `-o my-report` |
+| `-f, --format` | Output format: `html`, `json`, `csv` | `html` | `-f json` |
+| `-d, --device` | Device type: `mobile`, `desktop` | `mobile` | `-d desktop` |
+| `-c, --categories` | Audit categories (comma-separated) | `performance,accessibility,best-practices,seo` | `-c performance,seo` |
+| `--output-dir` | Output directory | `./lighthouse-reports` | `--output-dir ./reports` |
+| `--no-throttling` | Disable network/CPU throttling | false | `--no-throttling` |
 
-### Batch Audits
+#### Available Categories:
+- `performance` - Core Web Vitals, loading performance
+- `accessibility` - WCAG compliance, screen reader compatibility
+- `best-practices` - Security, modern web standards
+- `seo` - Search engine optimization
+- `pwa` - Progressive Web App features
 
-Audit multiple URLs at once:
+---
+
+### 2. Batch Audits
+
+Audit multiple URLs efficiently with concurrent processing.
 
 ```bash
-# From a file
+# Audit URLs from a file
 lighthouse-cli batch -f sample-urls.txt
 
-# From command line
+# Audit specific URLs from command line
 lighthouse-cli batch -u "https://example.com,https://google.com,https://github.com"
 
-# With custom settings
-lighthouse-cli batch -f urls.txt --format json --concurrent 5 --device desktop
+# Advanced batch audit with custom settings
+lighthouse-cli batch -f urls.txt --format json --concurrent 5 --device desktop -o batch-report
 ```
 
-**Options:**
-- `-f, --file <file>` - File containing URLs (one per line)
-- `-u, --urls <urls>` - Comma-separated URLs
-- `-o, --output <prefix>` - Output filename prefix
-- `--concurrent <number>` - Number of concurrent audits (default: 3)
-- All single audit options are also available
+#### Options:
+| Option | Description | Default | Example |
+|--------|-------------|---------|---------|
+| `-f, --file` | File containing URLs (one per line) | - | `-f my-urls.txt` |
+| `-u, --urls` | Comma-separated URLs | - | `-u "site1.com,site2.com"` |
+| `-o, --output` | Output filename prefix | Auto-generated | `-o batch-audit` |
+| `--concurrent` | Number of concurrent audits | `3` | `--concurrent 5` |
 
-### URL Comparison
+*All single audit options are also available for batch processing.*
 
-Compare performance metrics between two URLs:
-
-```bash
-lighthouse-cli compare https://example.com https://competitor.com
-
-# With specific device and categories
-lighthouse-cli compare https://site-a.com https://site-b.com -d desktop -c performance,seo
+#### URL File Format:
 ```
+# Comments start with #
+# One URL per line
 
-### Continuous Monitoring
-
-Monitor a website continuously and get alerts when performance drops:
-
-```bash
-# Monitor every hour with performance threshold of 80
-lighthouse-cli monitor https://example.com -i 60 -t 80
-
-# Monitor every 30 minutes with threshold of 90
-lighthouse-cli monitor https://example.com -i 30 -t 90
-```
-
-**Options:**
-- `-i, --interval <minutes>` - Monitoring interval in minutes (default: 60)
-- `-t, --threshold <score>` - Performance score threshold 0-100 (default: 80)
-
-## File Formats
-
-### URLs File Format
-
-Create a text file with one URL per line. Lines starting with `#` are treated as comments:
-
-```
 # Production sites
-https://example.com
+https://www.example.com
 https://api.example.com
 
-# Staging sites
+# Staging environments
 https://staging.example.com
 
 # Competitor analysis
@@ -131,80 +152,308 @@ https://competitor1.com
 https://competitor2.com
 ```
 
-### Output Formats
+---
 
-- **HTML** - Full interactive Lighthouse report (default)
-- **JSON** - Raw Lighthouse data for programmatic use
-- **CSV** - Spreadsheet-friendly format with key metrics
+### 3. URL Comparison
 
-## Examples
+Compare performance metrics between two websites side-by-side.
 
-### Basic Website Audit
 ```bash
-lighthouse-cli audit https://example.com
+# Basic comparison
+lighthouse-cli compare https://example.com https://competitor.com
+
+# Desktop comparison with specific categories
+lighthouse-cli compare https://old-site.com https://new-site.com -d desktop -c performance,seo
+
+# Compare staging vs production
+lighthouse-cli compare https://staging.mysite.com https://mysite.com
 ```
 
-### Comprehensive E-commerce Analysis
+#### Options:
+| Option | Description | Default | Example |
+|--------|-------------|---------|---------|
+| `-d, --device` | Device type: `mobile`, `desktop` | `mobile` | `-d desktop` |
+| `-c, --categories` | Audit categories (comma-separated) | `performance,accessibility,best-practices,seo` | `-c performance,seo` |
+| `--output-dir` | Output directory | `./lighthouse-reports` | `--output-dir ./comparisons` |
+
+---
+
+### 4. Continuous Monitoring
+
+Monitor websites continuously and receive alerts when performance degrades.
+
 ```bash
-lighthouse-cli batch -f ecommerce-sites.txt -d desktop -c performance,accessibility,best-practices,seo --format json --concurrent 3
+# Monitor every hour with 80% performance threshold
+lighthouse-cli monitor https://example.com -i 60 -t 80
+
+# Frequent monitoring (every 15 minutes) with high threshold
+lighthouse-cli monitor https://critical-app.com -i 15 -t 90
+
+# Monitor with custom output directory
+lighthouse-cli monitor https://example.com --output-dir ./monitoring-reports
 ```
 
-### Mobile Performance Comparison
-```bash
-lighthouse-cli compare https://old-site.com https://new-site.com -d mobile -c performance
+#### Options:
+| Option | Description | Default | Example |
+|--------|-------------|---------|---------|
+| `-i, --interval` | Monitoring interval in minutes | `60` | `-i 30` |
+| `-t, --threshold` | Performance score threshold (0-100) | `80` | `-t 90` |
+| `--output-dir` | Output directory | `./lighthouse-reports` | `--output-dir ./monitoring` |
+
+---
+
+## 📁 Output Structure
+
+Reports are organized in the following structure:
+
+```
+lighthouse-reports/
+├── single-audits/
+│   ├── example-com-2024-01-15-14-30-25.html
+│   └── github-com-2024-01-15-14-31-10.json
+├── batch-audits/
+│   ├── batch-summary-2024-01-15-15-00-00.json
+│   ├── example-com-2024-01-15-15-00-15.html
+│   └── google-com-2024-01-15-15-00-30.html
+├── comparisons/
+│   └── comparison-2024-01-15-16-00-00.json
+└── monitoring/
+    ├── example-com-monitor-2024-01-15-17-00-00.html
+    └── monitoring-log.json
 ```
 
-### Production Monitoring
+### Naming Convention:
+- **Single audits**: `{hostname}-{timestamp}.{format}`
+- **Batch audits**: Individual reports + `batch-summary-{timestamp}.json`
+- **Comparisons**: `comparison-{timestamp}.json`
+- **Monitoring**: `{hostname}-monitor-{timestamp}.{format}`
+
+---
+
+## 💡 Usage Examples
+
+### 🏢 Enterprise Website Audit
 ```bash
-lighthouse-cli monitor https://production-site.com -i 30 -t 85
+# Comprehensive audit for production site
+lighthouse-cli audit https://company.com -d desktop -c performance,accessibility,best-practices,seo -f json -o production-audit
 ```
 
-## Output Structure
+### 🛒 E-commerce Performance Analysis
+```bash
+# Batch audit of e-commerce pages
+lighthouse-cli batch -f ecommerce-pages.txt --format json --concurrent 4 --device mobile -o ecommerce-analysis
+```
 
-Reports are saved to `./lighthouse-reports/` by default with the following naming convention:
-- Single audits: `{hostname}-{timestamp}.{format}`
-- Batch audits: Individual reports + `batch-summary-{timestamp}.json`
+### 🔄 Before/After Deployment Comparison
+```bash
+# Compare old vs new version
+lighthouse-cli compare https://old.mysite.com https://new.mysite.com -d desktop -c performance
+```
 
-## Requirements
+### 📊 Continuous Production Monitoring
+```bash
+# Monitor critical application every 30 minutes
+lighthouse-cli monitor https://app.company.com -i 30 -t 85
+```
 
-- Node.js 16.0.0 or higher
-- Chrome/Chromium browser (automatically launched)
+### 🚀 Local Development Testing
+```bash
+# Test local development server without throttling
+lighthouse-cli audit http://localhost:3000 --no-throttling -d desktop
+```
 
-## Development
+### 📱 Mobile-First Performance Audit
+```bash
+# Mobile-focused audit with Core Web Vitals
+lighthouse-cli audit https://mobile-site.com -d mobile -c performance -f json
+```
+
+---
+
+## 🛠️ Development
+
+### Development Commands
 
 ```bash
-# Run in development mode
+# Run in development mode with hot reload
 npm run dev
 
 # Build the project
 npm run build
 
-# Watch for changes
+# Watch for changes during development
 npm run watch
 
 # Clean build directory
 npm run clean
+
+# Run tests (when implemented)
+npm test
 ```
 
-## Troubleshooting
+### Project Structure
 
-### Chrome Launch Issues
-If you encounter Chrome launch issues, ensure you have Chrome or Chromium installed and accessible in your PATH.
+```
+light-house-cli/
+├── src/
+│   ├── commands/          # CLI command definitions
+│   ├── services/          # Core business logic
+│   ├── types/            # TypeScript type definitions
+│   ├── utils/            # Utility functions
+│   ├── constants/        # Configuration constants
+│   └── index.ts          # Main entry point
+├── lighthouse-reports/   # Default output directory
+├── install.sh           # Installation script
+├── sample-urls.txt      # Example URLs file
+└── package.json         # Project configuration
+```
 
-### Memory Issues
-For large batch audits, consider reducing the `--concurrent` option to avoid memory issues.
+---
 
-### Network Issues
-Use `--no-throttling` for local development or when testing on fast networks.
+## 🔧 Troubleshooting
 
-## Contributing
+### Common Issues and Solutions
+
+#### 🚫 Chrome Launch Issues
+**Problem**: "Chrome failed to launch" or similar errors
+
+**Solutions**:
+```bash
+# Install Chrome/Chromium if missing
+# macOS
+brew install --cask google-chrome
+
+# Ubuntu/Debian
+sudo apt-get install google-chrome-stable
+
+# CentOS/RHEL
+sudo yum install google-chrome-stable
+```
+
+#### 💾 Memory Issues During Batch Audits
+**Problem**: Out of memory errors during large batch processing
+
+**Solutions**:
+```bash
+# Reduce concurrent audits
+lighthouse-cli batch -f urls.txt --concurrent 2
+
+# Process in smaller batches
+split -l 10 large-urls.txt batch-
+lighthouse-cli batch -f batch-aa
+lighthouse-cli batch -f batch-ab
+```
+
+#### 🌐 Network Connectivity Issues
+**Problem**: Timeouts or network-related failures
+
+**Solutions**:
+```bash
+# Disable throttling for local networks
+lighthouse-cli audit https://example.com --no-throttling
+
+# Use desktop mode for better performance
+lighthouse-cli audit https://example.com -d desktop
+```
+
+#### 📁 Permission Issues
+**Problem**: Cannot write to output directory
+
+**Solutions**:
+```bash
+# Create output directory with proper permissions
+mkdir -p ./lighthouse-reports
+chmod 755 ./lighthouse-reports
+
+# Use custom output directory
+lighthouse-cli audit https://example.com --output-dir ~/Documents/reports
+```
+
+#### 🔧 Node.js Version Issues
+**Problem**: Incompatible Node.js version
+
+**Solutions**:
+```bash
+# Check current version
+node --version
+
+# Install/update Node.js (using nvm)
+nvm install 16
+nvm use 16
+
+# Or install latest LTS
+nvm install --lts
+nvm use --lts
+```
+
+### Performance Tips
+
+1. **Optimize Concurrent Audits**: Start with `--concurrent 3` and adjust based on your system's performance
+2. **Use Appropriate Device Settings**: Desktop audits are generally faster than mobile
+3. **Select Specific Categories**: Use `-c performance` for faster audits when you only need performance metrics
+4. **Local Development**: Always use `--no-throttling` for local testing
+5. **Large Batch Processing**: Split large URL lists into smaller batches for better reliability
+
+---
+
+## 📊 Understanding Lighthouse Scores
+
+### Score Ranges:
+- 🟢 **90-100**: Good
+- 🟡 **50-89**: Needs Improvement  
+- 🔴 **0-49**: Poor
+
+### Key Metrics:
+- **Performance**: Core Web Vitals, loading speed, interactivity
+- **Accessibility**: Screen reader compatibility, color contrast, keyboard navigation
+- **Best Practices**: Security, modern web standards, browser compatibility
+- **SEO**: Search engine optimization, meta tags, structured data
+- **PWA**: Progressive Web App features, offline functionality, installability
+
+---
+
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
-## License
+---
 
-ISC License - see LICENSE file for details. 
+## 📄 License
+
+This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🆘 Support
+
+If you encounter any issues or have questions:
+
+1. Check the [Troubleshooting](#-troubleshooting) section
+2. Review the [examples](#-usage-examples) for similar use cases
+3. Create an issue in the GitHub repository
+4. Include your system information, command used, and error messages
+
+---
+
+## 🎯 Quick Reference
+
+```bash
+# Quick start commands
+lighthouse-cli audit https://example.com                    # Basic audit
+lighthouse-cli batch -f sample-urls.txt                     # Batch from file
+lighthouse-cli compare https://site1.com https://site2.com  # Compare sites
+lighthouse-cli monitor https://example.com -i 30 -t 85      # Monitor site
+
+# Common options
+-d desktop          # Desktop device
+-f json            # JSON output
+--no-throttling    # Disable throttling
+-c performance     # Performance only
+--concurrent 5     # 5 concurrent audits
+```
+
+Happy auditing! 🚀 
